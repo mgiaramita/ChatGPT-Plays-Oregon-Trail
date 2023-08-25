@@ -62,11 +62,11 @@ def gen_chat_rsp(message, message_history, role="user", model=MODEL):
     return reply
 
 
-def chatgpt_ot_loop(command, model):
+def chatgpt_ot_loop(command, model, moderate=True):
     message_history = [
         {
             "role": "user",
-            "content": "You are a user playing Oregon Train, the 1978 tezt based version if the game to be exact. You will receive the output of the game and will make a decision on what move to make next. If the prompt asks for an amount give a whole number response. Most prompts will let you know what the choices are and what decisions can be made. DO NOT respond in full sentences or like talking to a person, your responses should be in the form on commands to play Oregon Trail.",
+            "content": "You are a user playing Oregon Train, the 1978 text based version if the game to be exact. You will receive the output of the game and will make a decision on what move to make next. If the prompt asks for an amount give a whole number response. Most prompts will let you know what the choices are and what decisions can be made. DO NOT respond in full sentences or like talking to a person, your responses should be in the form on commands to play Oregon Trail.",
         },
         {"role": "assistant", "content": "OK"},
     ]
@@ -77,9 +77,10 @@ def chatgpt_ot_loop(command, model):
     try:
         while True:
             # Allow user to moderate
-            userin = input("\nUSER: Type EXIT to stop. Enter to continue.\n> ")
-            if userin == EXIT_STR:
-                break
+            if moderate:
+                userin = input("\nUSER: Type EXIT to stop. Enter to continue.\n> ")
+                if userin == EXIT_STR:
+                    break
 
             # Ensure OT has responded and then read all the current output
             time.sleep(PROC_RSP_WAIT)
@@ -110,11 +111,16 @@ def main():
     # Set up and read command line args
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--model", default=MODEL)
+    parser.add_argument("-U", "--UNLEASHED", action='store_true', default=False)
     args = parser.parse_args()
     print(f"M: {args.model}")
 
+    if args.UNLEASHED:
+        print("WARNING: This mode will let the AI play until the program terminates. Be ready to stop or kill the this process as necessary!")
+        userin = input("\nUSER: Press ENTER to let ChatGPT play in UNLEASHED mode.\n> ")
+
     print(LOGO)
-    chatgpt_ot_loop(config["DEFAULT"]["CMD"], args.model)
+    chatgpt_ot_loop(config["DEFAULT"]["CMD"], args.model, not args.UNLEASHED)
 
 
 if __name__ == "__main__":
