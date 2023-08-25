@@ -111,12 +111,14 @@ def main():
     # Set up and read command line args
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--model", default=MODEL)
-    parser.add_argument("-U", "--UNLEASHED", action='store_true', default=False)
+    parser.add_argument("-U", "--UNLEASHED", action="store_true", default=False)
     args = parser.parse_args()
     print(f"M: {args.model}")
 
     if args.UNLEASHED:
-        print("WARNING: This mode will let the AI play until the program terminates. Be ready to stop or kill the this process as necessary!")
+        print(
+            "WARNING: This mode will let the AI play until the program terminates. Be ready to stop or kill the this process as necessary!"
+        )
         userin = input("\nUSER: Press ENTER to let ChatGPT play in UNLEASHED mode.\n> ")
 
     print(LOGO)
