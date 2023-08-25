@@ -66,34 +66,37 @@ def chatgpt_ot_loop(command, model):
     message_history = [
         {
             "role": "user",
-            "content": "You are a user playing Oregon Train, the 1978 tezt based version if the game to be exact. You will receive the output of the game and will make a decision on what move to make next. If the prompt asks for an amount give a whole number response. Most prompts will let you know what the choices are and what decisions can be made. DO NOT respond in full sentences or like talking to a person, your responses should be in the form on commands to play Oregon Trail."
+            "content": "You are a user playing Oregon Train, the 1978 tezt based version if the game to be exact. You will receive the output of the game and will make a decision on what move to make next. If the prompt asks for an amount give a whole number response. Most prompts will let you know what the choices are and what decisions can be made. DO NOT respond in full sentences or like talking to a person, your responses should be in the form on commands to play Oregon Trail.",
         },
         {"role": "assistant", "content": "OK"},
     ]
 
-    ot_proc = pexpect.spawn(command)
+    ot_proc = pexpect.spawn(command, echo=False)
     print("ChatGPT and Oregon Trail are ready to begin.")
 
-    while True:
-        # Allow user to moderate
-        userin = input("\nUSER: Type EXIT to stop. Enter to continue.\n> ")
-        if userin == EXIT_STR:
-            break
+    try:
+        while True:
+            # Allow user to moderate
+            userin = input("\nUSER: Type EXIT to stop. Enter to continue.\n> ")
+            if userin == EXIT_STR:
+                break
 
-        # Ensure OT has responded and then read all the current output
-        time.sleep(PROC_RSP_WAIT)
-        ot_output = ot_proc.read_nonblocking(
-            size=PROC_READ_MAX, timeout=PROC_READ_TIMEOUT
-        ).decode("utf-8")
-        print(f"\n{ot_output}")
+            # Ensure OT has responded and then read all the current output
+            time.sleep(PROC_RSP_WAIT)
+            ot_output = ot_proc.read_nonblocking(
+                size=PROC_READ_MAX, timeout=PROC_READ_TIMEOUT
+            ).decode("utf-8")
+            print(f"\n{ot_output}")
 
-        # Send Oregon Trail prompt to ChatGPT
-        rsp = gen_chat_rsp(ot_output, message_history, model=model)
-        print(f"> {rsp}")
-        print_tokens()
+            # Send Oregon Trail prompt to ChatGPT
+            rsp = gen_chat_rsp(ot_output, message_history, model=model)
+            print(f"> {rsp}")
+            print_tokens()
 
-        # Send ChatGPT generated command to Oregon Trail
-        ot_proc.sendline(rsp)
+            # Send ChatGPT generated command to Oregon Trail
+            ot_proc.sendline(rsp)
+    except Exception as e:
+        print("\nTERMINATE CONDITION HIT")
 
     ot_proc.terminate(force=True)
 
