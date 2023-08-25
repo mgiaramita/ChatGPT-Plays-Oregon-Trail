@@ -36,7 +36,7 @@
 
 * Install the latest version of [Python 3](https://www.python.org/downloads).
 * Install the OpenAI [Python package](https://pypi.org/project/openai).
-* Install [pexpect](https://pypi.org/project/pexpect) to control the Zork process. 
+* Install [pexpect](https://pypi.org/project/pexpect) to control the Oregon Trail process. 
 * Clone the repo.
 * Oregon Trail can be installed in a number of ways and it depends on your system.
   * The original [BASIC source](https://archive.org/details/creativecomputing-1978-05/page/n143/mode/2up) was made public in 1978 and implementations of that can be found online ([example1](https://github.com/fortran-gaming/oregon-trail-1975), [example2](https://github.com/topherPedersen/OregonTrail1978)).
