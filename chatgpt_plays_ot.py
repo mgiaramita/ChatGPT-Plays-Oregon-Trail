@@ -87,15 +87,15 @@ def chatgpt_ot_loop(command, model):
         ).decode("utf-8")
         print(f"\n{ot_output}")
 
-        # Send Zork prompt to ChatGPT
+        # Send Oregon Trail prompt to ChatGPT
         rsp = gen_chat_rsp(ot_output, message_history, model=model)
         print(f"> {rsp}")
         print_tokens()
 
-        # Send ChatGPT generated command to Zork
+        # Send ChatGPT generated command to Oregon Trail
         ot_proc.sendline(rsp)
 
-    zork_proc.terminate(force=True)
+    ot_proc.terminate(force=True)
 
 
 def main():
